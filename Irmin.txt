@@ -1,0 +1,45 @@
+1) Irmin a library for persistent stores.
+2) Written in O'caml
+3) It helps to version-control the data.
+4) helps to persist and synchronize distributed data structures both on-disk and in-memory.
+5) Here distributed nodes fork, fetch, merge and push data between each other.
+6) It aims at tackling the challenges posed by CAP theorem.
+7) It consists of a set of low-level data structures that specify how the data should be persisted and shared among nodes.
+-- It consists of algorithms for efficient synchronization of the distributed low-level constructs.
+-- Consists of higher level data structures such as mergeable queues for the developer purpose.
+-- Irmin is part of Mirage OS, and holds no assumptions of OS environment -- hence portable.
+-- Irmin allows forking of new data structures and merging back of the forked structures.
+-- Irmin has a notion of block store which is a OCaml Heap. 
+	Irmin hashes the block contents and uses the hashed value as the address. 
+	So a style of virtual addressing.
+	This also helps Irmin to structure itself as a Content addressable storage.
+-- Irmin can be thought of a distributed version control database.
+
+
+-- Functional data structures are supposed to be more flexible that their imperative counterparts. 
+	Any change to a functional data structure is supposed to preserve both the old and new value, as opposed to an imperative data structure where 
+	we only need the new value.
+	Hence, functional data structures are said to be persistent in contrast to their ephemeral imperative counterparts.
+-- Function programming languages assume that all the data structures are imperative.
+
+-- In strict languages the function arguments are evaluated before the body of the function, while in case of lazy 
+	languages the evaluation of arguments is delayed till their is a need for the same. 
+	Once the arguments are evaluated the value of the same is cached so that it can be looked up again.
+	Calculating the time complexity of strict lanuguages is trivial as we know when and what arguments will be evaluated.
+
+-- Amortization is a technique to measure the bounds of an algorithm or data structure by considering both best and worst case results.
+
+-- Persistent data structures are immutable (that do not change). 
+	This implies that once a data structure is created its content will never change.
+	Modifying the content is actually a process of returning a new structure.
+	Though, often some parts are shared so as to reduce the costs associated with creating a new structure.
+
+-- Distributed version control systesm (DVCS) or distributed revision control systems (DRCS) allow multiple software developers to work on 
+	a given project from different remote locations.
+	In comparision to the centralized version control systesm where there is a single central repository which synchronizes data 
+	of every user accessing the system, DVCS provides an individual repository to each node. 
+	So each user has its own working copy, and DVCS synchronizes these repositories by exchanging patches among the users.
+	This also reduces the amount of communication as the synchronization among the repositories occur only when changes need to 
+	be shared among the peers.
+
+

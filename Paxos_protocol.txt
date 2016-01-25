@@ -1,0 +1,25 @@
+-- Used for implementing a fault-tolerant distributed system.
+-- It is a consensus algorithm.
+-- The consensus problem as follows:
+	Given a set of processes we need to choose a value by consensus. Some of the coditions for the same:
+	-- The value to be choosen needs to be among the proposed set of values.
+	-- Only one value should be chosen.
+	-- All process should be informed about the chosen value.
+	-- If no value is proposed then no value should be chosen.
+	-- Until a value is chosen the processes should not be informed about a choice.
+-- So the consensus problem requires that eventually some value should be chosen and all the processes need to be informed about the same.
+-- Here each process can choose to play one or more following roles: proposers, acceptors and learners. 
+-- The algorithm requires one proposed value to agreed upon by majority of acceptors, and to allow modification of the accepted value 
+	if aother process proposes a new value.
+	So, the algorithm allows to coerce an acceptor to change its vote, if it is shown that a new proposed value may be accepted.
+-- So a proposer starts by sending a message "prepare(n)" where n is the proposed value, to all (or majority) of acceptors. 
+	Each acceptor compares n to the highest-numbered proposal for which it has responded (an earlier reply to some "prepare(n')").
+	If n>n', then the acceptor sends an acknowledgement -- ack(n,v,n'), where is the "highest-numbered value" accepted earlier by the 
+	acceptor, n' is the number of the proposal containing v. 
+	If n<N' then the acceptor sends a NACK (or may not reply).
+-- The proposer then waits for reply from majority of acceptors, and then chooses the most recent value of "v". 
+	The most recent value is determined from the numbering of all the received n' (from various acceptors). 
+	The proposer now performs second (actual) round of sending a message, and send a message "accept(n,v) to the majority of acceptors.
+-- The acceptors may choose "v" unless they receive another n" with n" > n (proposal number ordering). 
+	If majority of acceptors, select "v" then it becomes the decision value for the protocol.
+-- Finally, the acceptors may inform the proposer (and all the learners) about the chosen value.

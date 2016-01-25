@@ -1,0 +1,52 @@
+-- Cassandra handles high volume of data, incoming at a high data velocity with no specific location. 
+-- It is a perfect example of de-centralized deployments.
+-- It is a non-relational database.
+-- It provides redundancy of both data and node functions, and hence there isn't any single point of failure.
+-- Supports strong or eventual data consistency.
+-- Has a CQL (Cassandra Quer Language) that helps to moving data to and from RDBs easy.
+-- Cassandra follows a masterless ring architecture.
+	The communication among the nodes is using a distributed, scalable protocol -- gossip.
+-- The process of writing data in cassandra is multi-step. 
+	When the user writes some data, then first an entry for the same is recorded in the on-disk commit log, and 
+	then it is stored in a memory table -- memtable.
+	When the memtable gets filled then all the data is flushed to an immutable file on disk -- SSTable.
+	Hence, buffering of writes to memory is sequential.
+	At any point of time it is possible that multiple SSTables are existing in memory. 
+	Hence, periodically a compaction process runs over these memtables and tries to coalesce them.
+-- For reading the data, Cassandra again follows a multi-step strategy.
+	It tries to test various SStables one after the another till the required entry is found.
+	It uses a bloom filter to check whether an SSTable has the required data or not.
+	If the bloom filter states yes then in checks the in-memory cache (confirmation process), and then fetches the data.
+	The no reply from a bloom filter helps Cassandra to check next SSTable.
+
+-- The key to maintaining a masterless and no-single point failure system requires Cassandra to 
+	follow two properties: Automatic Data Distribution and Replication basis.
+-- Automatic Data Distribution:
+	Cassandra removes the burden from the programmer to distribute the data onto different nodes of a cluster.
+	It uses a partitioner that decides what data should be moved to which node.
+	The partitioner uses a hashing technique that hashes a row of a table, and uses thee resulting has value to map onto one of the nodes.
+-- Replication Basis:
+	A Cassandra cluster consists of multiple keyspaces.
+	This allows Cassandra to offer replication at the keyspace level. 
+	Hence, different keyspaces have different replication models.
+-- Basic objects in Cassandra are: keyspace, table, primary key and index.
+	Keyspace -- Consists of tables and indexes. Also defines the level for replication.
+	Table	 -- Consists of multiple rows and columns.
+	Primary Key -- Identifies a row in a table, and helps to distribute rows among different nodes.
+	Index	 -- Helps to read data.
+
+-- Cassandra supports AID (atomicity, isolation and durability) part of the ACID transactions. 
+	It does not provide any guarantees for the Consistency part.
+-- Cassandra supports tunable consistency, that is for each transcation the user can decide whether he needs strong or eventual consistency. 
+-- It extends the Paxos consensus protocol to agree upon the proposed data modification.
+
+
+-- In a NoSQL there is a notion of column family, which consists of columns of related data.
+	It can be seen as tuple which represents a key-value pair, where each key is mapped to 
+	Column family databases store data by columns, in comparison to the relational databases that store data by rows.
+	These databases have no general schema, except that each column family is represented by a key-value pair.
+	A column family consists of columns and super-columns, which consume zero bytes if they have no value.
+	All the data in a single column family will reside in the same file.
+	A super-column consists of other columns, but no other super-columns.
+	Each column consists of various key-value pairs. It basically has 3 parts: namel value and timestamp.
+
